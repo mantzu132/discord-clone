@@ -19,7 +19,7 @@ export default function NavigationItem({
   const router = useRouter();
 
   function onButtonClick() {
-    router.push(`servers/${id}`);
+    router.push(`/servers/${id}`);
   }
 
   return (
