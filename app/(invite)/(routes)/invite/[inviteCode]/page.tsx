@@ -47,7 +47,7 @@ const InviteCodePage = async ({ params }: InviteCodePageProps) => {
     return redirect(`/servers/${server.id}`);
   }
 
-  return <div>HELLAU WORLD FROM INVITE CODE PAGE</div>;
+  return null;
 };
 
 export default InviteCodePage;

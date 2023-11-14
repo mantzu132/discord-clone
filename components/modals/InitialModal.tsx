@@ -31,15 +31,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Server name is required.",
-  }),
-  imageUrl: z.string().min(1, {
-    message: "Server image is required.",
-  }),
-});
+import { serverSchema } from "@/types";
 
 const InitialModal = () => {
   const router = useRouter();
@@ -53,10 +45,10 @@ const InitialModal = () => {
       name: "",
       imageUrl: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(serverSchema),
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof serverSchema>) => {
     try {
       await axios.post("/api/servers", values);
       form.reset();

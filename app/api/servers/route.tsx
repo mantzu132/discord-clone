@@ -3,10 +3,14 @@ import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { MemberRole } from "@prisma/client";
+import { serverSchema } from "@/types";
 
 export async function POST(req: Request) {
   try {
-    const { name, imageUrl } = await req.json();
+    const body: unknown = await req.json();
+    const parsedBody = serverSchema.parse(body);
+
+    const { name, imageUrl } = parsedBody;
     const profile = await currentProfile();
 
     if (!profile) {
