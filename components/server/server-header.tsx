@@ -58,7 +58,10 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
               Server Settings
               <Settings className="h-5 w-5 ml-auto" />
             </DropdownMenuItem>
-            <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
+            <DropdownMenuItem
+              className="px-3 py-2 text-sm cursor-pointer"
+              onClick={() => onOpen("members", { server })}
+            >
               Manage Members
               <Users className="h-5 w-5 ml-auto" />
             </DropdownMenuItem>
