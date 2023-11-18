@@ -1,4 +1,4 @@
-import { Member, Profile, Server, Channel } from "@prisma/client";
+import { Member, Profile, Server, Channel, ChannelType } from "@prisma/client";
 import * as z from "zod";
 
 export type FullServerInfo = Server & {
@@ -14,4 +14,16 @@ export const serverSchema = z.object({
   imageUrl: z.string().min(1, {
     message: "Server image is required.",
   }),
+});
+
+export const channelSchema = z.object({
+  name: z
+    .string()
+    .min(4, {
+      message: "Channel name is required.",
+    })
+    .refine((name) => name != "general", {
+      message: "Channel name cannot be 'general'.",
+    }),
+  type: z.nativeEnum(ChannelType),
 });
