@@ -26,7 +26,6 @@ interface ServerSearchProps {
 }
 
 const ServerSearch = ({ data }: ServerSearchProps) => {
-  console.log(data);
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const params = useParams();
