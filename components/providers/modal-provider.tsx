@@ -12,7 +12,7 @@ import DeleteChannelModal from "@/components/modals/delete-channel-modal";
 import { EditChannelModal } from "@/components/modals/edit-channel-modal";
 
 export const ModalProvider = () => {
-  // preventing modals to be rendered on server side (creates inconsistencies)
+  // preventing modals to be rendered on server side (creates inconsistencies / hydration errors)
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
