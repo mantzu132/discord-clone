@@ -1,6 +1,8 @@
 import { Member, Profile, Server, Channel, ChannelType } from "@prisma/client";
 import * as z from "zod";
-
+import { Server as NetServer, Socket } from "net";
+import { Server as SocketIOServer } from "socket.io";
+import { NextApiResponse } from "next";
 export type FullServerInfo = Server & {
   channels: Channel[];
   members: (Member & { profile: Profile })[];
@@ -27,3 +29,11 @@ export const channelSchema = z.object({
     }),
   type: z.nativeEnum(ChannelType),
 });
+
+export type NextApiResponseServerIo = NextApiResponse & {
+  socket: Socket & {
+    server: NetServer & {
+      io: SocketIOServer;
+    };
+  };
+};
