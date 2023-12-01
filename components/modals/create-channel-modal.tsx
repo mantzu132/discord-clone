@@ -46,8 +46,6 @@ const CreateChannelModal = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(data.channelType);
-
   const form = useForm({
     defaultValues: {
       name: "",
