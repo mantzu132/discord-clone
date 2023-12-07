@@ -12,6 +12,7 @@ import {
   Loader2,
   MoreVertical,
   Shield,
+  ShieldAlert,
   ShieldCheck,
   ShieldQuestion,
 } from "lucide-react";
@@ -39,7 +40,7 @@ import { useRouter } from "next/navigation";
 const roleIconMap = {
   GUEST: null,
   MODERATOR: <ShieldCheck className="h-4 w-4 ml-2 text-indigo-500" />,
-  ADMIN: <ShieldCheck className="h-4 w-4 text-rose-500" />,
+  ADMIN: <ShieldAlert className="h-4 w-4 ml-2 text-rose-500" />,
 };
 const MembersModal = () => {
   const router = useRouter();
