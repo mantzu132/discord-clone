@@ -3,14 +3,7 @@
 import { Member, MemberRole, Profile } from "@prisma/client";
 import UserAvatar from "@/components/user-avatar";
 import ActionTooltip from "@/components/action-tooltip";
-import {
-  Edit,
-  FileIcon,
-  ShieldAlert,
-  ShieldCheck,
-  Trash,
-  X,
-} from "lucide-react";
+import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -20,16 +13,15 @@ import qs from "query-string";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import EmojiPicker from "@/components/emoji-picker";
 import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
 
 interface ChatItemProps {
   id: string;
   content: string;
   member: Member & {
-    profile: Profile; //who sent the image
+    profile: Profile;
   };
   timestamp: string;
   fileUrl: string | null;
@@ -64,7 +56,7 @@ const ChatItem = ({
 }: ChatItemProps) => {
   const isAdmin = currentMember.role === MemberRole.ADMIN;
   const isModerator = currentMember.role === MemberRole.MODERATOR;
-  const isOwner = currentMember.id === member.id;
+  const isOwner = true;
   const canDeleteMessage = !deleted && (isAdmin || isOwner || isModerator);
   const canEditMessage = !deleted && isOwner && !fileUrl;
   const isPDF = fileUrl?.endsWith(".pdf");
@@ -72,6 +64,17 @@ const ChatItem = ({
 
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const params = useParams();
+  const router = useRouter();
+
+  const onMemberClick = () => {
+    if (member.id === currentMember.id) {
+      return;
+    }
+
+    router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
+  };
 
   // Emoji select in edit
   const handleEmojiSelect = (emoji: string) => {
@@ -123,6 +126,23 @@ const ChatItem = ({
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setIsDeleting(true);
+      const url = qs.stringifyUrl({
+        url: `${socketUrl}/${id}`,
+        query: socketQuery,
+      });
+
+      await axios.delete(url);
+
+      form.reset();
+      setIsDeleting(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     form.reset({ content: content });
   }, [content]);
@@ -130,14 +150,20 @@ const ChatItem = ({
   return (
     <div className="relative flex group flex-center hover:bg-black/5 p-4 transition w-full">
       {/*<div className="group flex gap-x-2 items-start w-full"></div>*/}
-      <div className="cursor-pointer hover:drop-shadow-md transition">
+      <div
+        onClick={onMemberClick}
+        className="cursor-pointer hover:drop-shadow-md transition"
+      >
         <UserAvatar src={member.profile.imageUrl} />
       </div>
       <div className="w-full">
         <div className=" items-center gap-x-1 flex-wrap">
           <div className="flex items-baseline ml-3 gap-2">
             <div className="flex items-center ">
-              <p className="font-semibold text-sm hover:underline cursor-pointer">
+              <p
+                onClick={onMemberClick}
+                className="font-semibold text-sm hover:underline cursor-pointer"
+              >
                 {member.profile.name}
               </p>
               <ActionTooltip label={member.role}>
@@ -243,7 +269,9 @@ const ChatItem = ({
             </ActionTooltip>
           )}
           <ActionTooltip label="Delete">
-            <Trash className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+            <button disabled={isDeleting} onClick={() => onDelete()}>
+              <Trash className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+            </button>
           </ActionTooltip>
         </div>
       )}

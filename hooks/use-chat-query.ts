@@ -1,4 +1,3 @@
-import { useParams } from "next/navigation";
 import { useSocket } from "@/components/providers/socket-provider";
 import qs from "query-string";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -13,7 +12,7 @@ interface ChatQueryProps {
 
 export const useChatQuery = ({
   queryKey,
-  apiUrl,
+  apiUrl, // /api/messages
   paramKey,
   paramValue,
 }: ChatQueryProps) => {
