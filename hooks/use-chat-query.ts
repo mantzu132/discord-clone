@@ -23,7 +23,7 @@ export const useChatQuery = ({
       {
         url: apiUrl,
         query: {
-          cursor: pageParam,
+          cursor: pageParam as unknown as string,
           [paramKey]: paramValue,
         },
       },
